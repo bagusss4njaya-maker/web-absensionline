@@ -35,7 +35,7 @@
     </script>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-500">
             <div class="flex items-center justify-between">
                 <div>
@@ -71,6 +71,19 @@
                 <div class="p-3 bg-red-100 rounded-full">
                     <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-gray-600">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 font-medium">Tidak Hadir</p>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ $absentCount }}</h3>
+                </div>
+                <div class="p-3 bg-gray-100 rounded-full">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
                     </svg>
                 </div>
             </div>

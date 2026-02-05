@@ -23,6 +23,7 @@ Route::post('/clock-out', [AttendanceController::class, 'clockOut'])->name('cloc
 
 // Admin routes
 Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+Route::get('/admin/calendar', [DashboardController::class, 'calendar'])->name('admin.calendar');
 Route::resource('admin/employees', EmployeeController::class, ['as' => 'admin']);
 
 // Attendance routes (merged into EmployeeController)

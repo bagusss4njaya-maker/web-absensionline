@@ -14,15 +14,16 @@
                 <a href="/" class="text-xl font-bold text-gray-800 mr-8">Absensi Online</a>
                 @if(Auth::user()->role === 'admin')
                     <div class="hidden md:flex space-x-4">
-                        <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-blue-600 font-medium">Dashboard</a>
-                        <a href="{{ route('admin.employees.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Pegawai</a>
-                        <a href="{{ route('admin.attendances.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Data Absensi</a>
-                        <a href="{{ route('admin.schedules.index') }}" class="text-gray-600 hover:text-blue-600 font-medium">Jadwal Kerja</a>
+                        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Dashboard</a>
+                        <a href="{{ route('admin.calendar') }}" class="{{ request()->routeIs('admin.calendar') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Kalender</a>
+                        <a href="{{ route('admin.employees.index') }}" class="{{ request()->routeIs('admin.employees.*') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Pegawai</a>
+                        <a href="{{ route('admin.attendances.index') }}" class="{{ request()->routeIs('admin.attendances.*') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Data Absensi</a>
+                        <a href="{{ route('admin.schedules.index') }}" class="{{ request()->routeIs('admin.schedules.*') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Jadwal Kerja</a>
                     </div>
                 @else
                     <div class="hidden md:flex space-x-4">
-                        <a href="{{ route('user.dashboard') }}" class="text-gray-600 hover:text-blue-600 font-medium">Dashboard</a>
-                        <a href="{{ route('user.profile') }}" class="text-gray-600 hover:text-blue-600 font-medium">Profil</a>
+                        <a href="{{ route('user.dashboard') }}" class="{{ request()->routeIs('user.dashboard') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Dashboard</a>
+                        <a href="{{ route('user.profile') }}" class="{{ request()->routeIs('user.profile*') ? 'text-blue-600' : 'text-gray-600' }} hover:text-blue-600 font-medium">Profil</a>
                     </div>
                 @endif
             </div>

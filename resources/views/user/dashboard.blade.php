@@ -41,18 +41,46 @@
                 document.getElementById('user-clock').textContent = timeString;
 
                 // Update Clock Out Button State
-                const btn = document.getElementById('clock-out-btn');
-                if (btn) {
+                const btnOut = document.getElementById('clock-out-btn');
+                if (btnOut) {
                     if (timeString < scheduleEndTime) {
-                        btn.disabled = true;
-                        btn.classList.remove('bg-red-500', 'hover:bg-red-600');
-                        btn.classList.add('bg-gray-400', 'cursor-not-allowed');
-                        btn.innerText = `Belum Waktunya Pulang (Jadwal: ${scheduleEndTime})`;
+                        btnOut.disabled = true;
+                        btnOut.classList.remove('bg-red-500', 'hover:bg-red-600');
+                        btnOut.classList.add('bg-gray-400', 'cursor-not-allowed');
+                        btnOut.innerText = `Belum Waktunya Pulang (Jadwal: ${scheduleEndTime})`;
                     } else {
-                        btn.disabled = false;
-                        btn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                        btn.classList.add('bg-red-500', 'hover:bg-red-600');
-                        btn.innerText = 'Pulang (Clock Out)';
+                        btnOut.disabled = false;
+                        btnOut.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                        btnOut.classList.add('bg-red-500', 'hover:bg-red-600');
+                        btnOut.innerText = 'Pulang (Clock Out)';
+                    }
+                }
+
+                // Update Clock In Button State / Absent Status
+                const btnIn = document.getElementById('clock-in-btn');
+                const clockInContainer = document.getElementById('clock-in-container');
+                const absentStatus = document.getElementById('absent-status');
+
+                if (btnIn) {
+                    if (timeString >= scheduleEndTime) {
+                        // Option 1: Disable button (Previous)
+                        // btnIn.disabled = true;
+                        // btnIn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                        // btnIn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                        // btnIn.innerText = 'Sudah Lewat Jadwal Pulang';
+                        
+                        // Option 2: Show Absent Status (New Request)
+                        if (clockInContainer) clockInContainer.classList.add('hidden');
+                        if (absentStatus) absentStatus.classList.remove('hidden');
+                    } else {
+                        // Ensure button is visible if within time
+                        if (clockInContainer) clockInContainer.classList.remove('hidden');
+                        if (absentStatus) absentStatus.classList.add('hidden');
+
+                        btnIn.disabled = false;
+                        btnIn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                        btnIn.classList.add('bg-green-500', 'hover:bg-green-600');
+                        btnIn.innerText = 'Masuk (Clock In)';
                     }
                 }
             }
@@ -63,10 +91,21 @@
 
         <div class="flex flex-col space-y-4">
             @if(!$todayAttendance)
-                <form action="{{ route('clock.in') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 font-bold text-lg shadow">Masuk (Clock In)</button>
-                </form>
+                <div id="clock-in-container">
+                    <form action="{{ route('clock.in') }}" method="POST">
+                        @csrf
+                        <button type="submit" id="clock-in-btn" class="w-full bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 font-bold text-lg shadow">Masuk (Clock In)</button>
+                    </form>
+                </div>
+                <div id="absent-status" class="hidden p-6 bg-red-50 border border-red-200 rounded-lg text-center shadow-inner">
+                    <div class="flex flex-col items-center justify-center text-red-600">
+                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-xl font-bold">Tidak Hadir</h3>
+                        <p class="text-sm mt-1">Anda telah melewati batas waktu jam pulang.</p>
+                    </div>
+                </div>
             @elseif(!$todayAttendance->clock_out)
                 <div class="p-4 bg-green-50 border border-green-200 rounded text-green-800 mb-4">
                     <p class="font-semibold">Anda sudah absen masuk pada:</p>

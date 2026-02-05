@@ -164,7 +164,40 @@ class EmployeeController extends Controller
         $attendances = $query->paginate(10)->withQueryString();
         $users = User::where('role', 'user')->orderBy('name')->get();
 
-        return view('admin.attendances.index', compact('attendances', 'users'));
+        // Calculate Absent Users
+        $filterDate = $request->date ?? now()->toDateString();
+        
+        $absentQuery = User::where('role', 'user');
+        
+        if ($request->has('user_id') && $request->user_id != '') {
+            $absentQuery->where('id', $request->user_id);
+        }
+        
+        $potentialAbsentUsers = $absentQuery->get();
+        $presentUserIds = Attendance::whereDate('date', $filterDate)->pluck('user_id')->toArray();
+        
+        $absentUsers = $potentialAbsentUsers->filter(function($user) use ($filterDate, $presentUserIds) {
+            // If user is present, not absent
+            if (in_array($user->id, $presentUserIds)) {
+                return false;
+            }
+            
+            // Check time/date condition
+            $isAbsent = false;
+            $today = now()->toDateString();
+            
+            if ($filterDate < $today) {
+                $isAbsent = true;
+            } elseif ($filterDate === $today) {
+                if (now()->format('H:i:s') > $user->end_time) {
+                    $isAbsent = true;
+                }
+            }
+            
+            return $isAbsent;
+        });
+
+        return view('admin.attendances.index', compact('attendances', 'users', 'absentUsers', 'filterDate'));
     }
 
     public function attendanceEdit(string $id)
